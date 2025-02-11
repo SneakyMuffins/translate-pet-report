@@ -94,3 +94,15 @@ http://localhost:3000
 Make sure both services are running before accessing the frontend.
 
 This setup provides flexibility, control, and a strong foundation for future improvements.
+
+## Additional Development Process: Translation Optimization Considerations
+
+During development, I considered several strategies for optimizing translation fetching:
+
+1. **Batch Translation**: Sending multiple texts in a single API request instead of making separate calls for each text element. This could reduce network overhead, but requires more complex logic for grouping texts.
+
+2. **Lazy Loading / On-Demand Translation**: Using techniques like **IntersectionObserver** to translate text only when it comes into view or when required. This could improve initial load times but would add complexity to the translation flow.
+
+3. **Client-Side Caching**: Storing translations in the browser’s `localStorage` to avoid repeated requests for the same text. While this could speed up repeated visits, it would require additional management for cache invalidation.
+
+These optimizations were considered for future development but not implemented due to time limits.

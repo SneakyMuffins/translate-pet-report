@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 import ReportHeader from "./components/ReportHeader";
 import ReportPage from "./components/ReportPage";
@@ -6,6 +6,7 @@ import ReportSection from "./components/ReportSection";
 import ReportBasicInfoSection from "./components/ReportBasicInfoSection";
 import ReportAdditionalInformationSection from "./components/ReportAdditionalInformationSection";
 import { additionalInformation } from "./utils/constants";
+import { translateText } from "./utils/translateText";
 
 const styles = {
     wrapper: {
@@ -27,6 +28,10 @@ const styles = {
 };
 
 function App() {
+    useEffect(() => {
+        translateText()
+    }, [])
+
     return (
         <div style={styles.wrapper}>
             <div style={styles.container}>
