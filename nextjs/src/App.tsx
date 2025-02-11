@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import ReportHeader from "./components/ReportHeader";
 import ReportPage from "./components/ReportPage";
@@ -25,16 +25,33 @@ const styles = {
         gapY: "2rem",
         height: "95%",
     },
+    languageSwitcher: {
+        marginBottom: "20px",
+    }
 };
 
 function App() {
+    const [selectedLang, setSelectedLang] = useState("es");
+
     useEffect(() => {
-        translateText()
-    }, [])
+        translateText(selectedLang);
+    }, [selectedLang]);
 
     return (
         <div style={styles.wrapper}>
             <div style={styles.container}>
+                <div style={styles.languageSwitcher}>
+                    <select
+                        value={selectedLang}
+                        onChange={(e) => setSelectedLang(e.target.value)}
+                    >
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="pt">Portuguese</option>
+                    </select>
+                </div>
+
                 <ReportHeader />
                 <ReportPage>
                     <ReportBasicInfoSection />
