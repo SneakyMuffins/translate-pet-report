@@ -99,7 +99,7 @@ This setup provides flexibility, control, and a strong foundation for future imp
 
 During development, I considered several strategies for optimizing translation fetching:
 
-1. **Batch Translation**: Sending multiple texts in a single API request instead of making separate calls for each text element. This could reduce network overhead, but requires more complex logic for grouping texts.
+1. **Batch Translation in Chunks**: Splitting Batch translation request into chunks to improve loading speeds
 
 2. **Lazy Loading / On-Demand Translation**: Using techniques like **IntersectionObserver** to translate text only when it comes into view or when required. This could improve initial load times but would add complexity to the translation flow.
 
