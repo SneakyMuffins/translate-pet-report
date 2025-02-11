@@ -22,7 +22,7 @@ const ReportHeader = () => {
         <div style={styles.container}>
             <img
                 alt="Logo"
-                src={require("../static/logo.png")}
+                src="/logo.png"
                 style={styles.logo}
             />
             <span style={styles.secondaryText} translate="yes">

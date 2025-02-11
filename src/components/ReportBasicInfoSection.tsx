@@ -72,7 +72,7 @@ const ReportBasicInfoSection = () => {
                 <ContactInfoSection style={{ gridColumn: 2 }} />
                 <img
                     alt="report-logo"
-                    src={require("../static/report-logo.png")}
+                    src="/report-logo.png"
                     style={styles.segmentImg}
                 />
             </ReportSection>
