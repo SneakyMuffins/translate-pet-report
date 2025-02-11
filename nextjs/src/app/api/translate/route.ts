@@ -1,13 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import NodeCache from "node-cache";
+import { SUPPORTED_LANGUAGES } from "./config";
 
 const cache = new NodeCache({ stdTTL: 86400 }); // One-day translation cache
-const LIBRETRANSLATE_URL = "http://localhost:5000/translate"; // Move to .env
-const SUPPORTED_LANGUAGES = ["de", "es", "fr", "pt", "en"];
+const LIBRETRANSLATE_URL = process.env.LIBRETRANSLATE_URL;
+
 
 export async function POST(req: NextRequest) {
     try {
         const { text, targetLang } = await req.json();
+
+        if (!LIBRETRANSLATE_URL) {
+            throw new Error("LIBRETRANSLATE_URL is not defined in the environment variables");
+        }
 
         if (!text || !targetLang || !SUPPORTED_LANGUAGES.includes(targetLang)) {
             return NextResponse.json({ error: "Invalid request parameters" }, { status: 400 });
