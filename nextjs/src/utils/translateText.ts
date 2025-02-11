@@ -1,8 +1,9 @@
-export const translateText = async (targetLang: string) => {
+export const translateText = async (
+    originalTexts: Record<string, string>,
+    targetLang: string
+): Promise<void> => {
     const elements = document.querySelectorAll('[translate="yes"]');
-
-    // Collect texts that need translation
-    const textsToTranslate = Array.from(elements).map((element: Element) => element.textContent || "");
+    const textsToTranslate = Object.values(originalTexts);
 
     // Send the texts in a single API request
     if (textsToTranslate.length > 0) {
@@ -10,7 +11,7 @@ export const translateText = async (targetLang: string) => {
             const response = await fetch('/api/translate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ texts: textsToTranslate, targetLang }),
+                body: JSON.stringify({ texts: textsToTranslate, sourceLang: 'en', targetLang }),
             });
 
             if (response.ok) {

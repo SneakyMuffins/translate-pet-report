@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createContext, useContext } from "react";
 import "./App.css";
 import ReportHeader from "./components/ReportHeader";
 import ReportPage from "./components/ReportPage";
@@ -7,6 +7,14 @@ import ReportBasicInfoSection from "./components/ReportBasicInfoSection";
 import ReportAdditionalInformationSection from "./components/ReportAdditionalInformationSection";
 import { additionalInformation } from "./utils/constants";
 import { translateText } from "./utils/translateText";
+
+interface LanguageContextType {
+    originalTexts: Record<string, string>;
+}
+
+const LanguageContext = createContext<LanguageContextType>({
+    originalTexts: {},
+});
 
 const styles = {
     wrapper: {
@@ -27,43 +35,69 @@ const styles = {
     },
     languageSwitcher: {
         marginBottom: "20px",
-    }
+    },
 };
 
-function App() {
-    const [selectedLang, setSelectedLang] = useState("es");
+const ReportContent = React.memo(() => {
+    return (
+        <>
+            <ReportHeader />
+            <ReportPage>
+                <ReportBasicInfoSection />
+            </ReportPage>
+            <ReportPage>
+                <ReportSection title={additionalInformation.title}>
+                    <ReportAdditionalInformationSection />
+                </ReportSection>
+            </ReportPage>
+        </>
+    );
+})
+
+const App: React.FC = () => {
+    const [selectedLang, setSelectedLang] = useState<string>("en");
+    const [originalTexts, setOriginalTexts] = useState<Record<string, string>>({});
 
     useEffect(() => {
-        translateText(selectedLang);
-    }, [selectedLang]);
+        const elements = document.querySelectorAll('[translate="yes"]');
+        const texts: Record<string, string> = {};
+
+        elements.forEach((element, index) => {
+            if (element.textContent) {
+                texts[`text_${index}`] = element.textContent;
+            }
+        });
+
+        setOriginalTexts(texts);
+    }, []);
+
+    useEffect(() => {
+        translateText(originalTexts, selectedLang);
+    }, [selectedLang, originalTexts]);
 
     return (
-        <div style={styles.wrapper}>
-            <div style={styles.container}>
-                <div style={styles.languageSwitcher}>
-                    <select
-                        value={selectedLang}
-                        onChange={(e) => setSelectedLang(e.target.value)}
-                    >
-                        <option value="es">Spanish</option>
-                        <option value="fr">French</option>
-                        <option value="de">German</option>
-                        <option value="pt">Portuguese</option>
-                    </select>
-                </div>
+        <LanguageContext.Provider value={{ originalTexts }}>
+            <div style={styles.wrapper}>
+                <div style={styles.container}>
+                    <div style={styles.languageSwitcher}>
+                        <select
+                            value={selectedLang}
+                            onChange={(e) => setSelectedLang(e.target.value)}
+                        >
+                            <option value="en">English</option>
+                            <option value="es">Spanish</option>
+                            <option value="fr">French</option>
+                            <option value="de">German</option>
+                            <option value="pt">Portuguese</option>
+                        </select>
+                    </div>
 
-                <ReportHeader />
-                <ReportPage>
-                    <ReportBasicInfoSection />
-                </ReportPage>
-                <ReportPage>
-                    <ReportSection title={additionalInformation.title}>
-                        <ReportAdditionalInformationSection />
-                    </ReportSection>
-                </ReportPage>
+                    {/* Use the memoized ReportContent component */}
+                    <ReportContent />
+                </div>
             </div>
-        </div>
+        </LanguageContext.Provider>
     );
-}
+};
 
 export default App;
